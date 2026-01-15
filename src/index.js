@@ -6,6 +6,7 @@ import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprot
 import { config } from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { readFileSync } from 'fs';
 
 // Import Salesforce client and tools
 import { SalesforceClient } from './salesforce/client.js';
@@ -26,16 +27,19 @@ import { TIME_MACHINE_TOOLS, SalesforceTimeMachine } from './tools/time_machine.
 // Load environment variables
 config();
 
+const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url)));
+const VERSION = pkg.version;
+
 // Handle CLI arguments
 const args = process.argv.slice(2);
 if (args.includes('--version') || args.includes('-v')) {
-  console.log('1.1.5');
+  console.log(VERSION);
   process.exit(0);
 }
 
 if (args.includes('--help') || args.includes('-h')) {
   console.log(`
-@aiondadotcom/mcp-salesforce v1.1.5
+@aiondadotcom/mcp-salesforce v${VERSION}
 
 USAGE:
   npx -p @aiondadotcom/mcp-salesforce mcp-salesforce              # Start MCP server
