@@ -94,24 +94,32 @@ class MCPSalesforceServer {
 
   setupServer() {
     // List available tools
+    const availableTools = [
+      setupTool,
+      salesforceLearnTool,
+      salesforceInstallationInfoTool,
+      salesforceLearnContextTool,
+      queryTool,
+      createTool,
+      updateTool,
+      deleteTool,
+      describeTool,
+    ];
+
+    if (!process.env.DISABLE_AUTH_TOOL) {
+      availableTools.push(reauth);
+    }
+
+    availableTools.push(
+      BACKUP_TOOLS.salesforce_backup,
+      BACKUP_TOOLS.salesforce_backup_list,
+      BACKUP_TOOLS.salesforce_backup_status,
+      TIME_MACHINE_TOOLS[0]
+    );
+
     this.server.setRequestHandler(ListToolsRequestSchema, async () => {
       return {
-        tools: [
-          setupTool,
-          salesforceLearnTool,
-          salesforceInstallationInfoTool,
-          salesforceLearnContextTool,
-          queryTool,
-          createTool,
-          updateTool,
-          deleteTool,
-          describeTool,
-          reauth,
-          BACKUP_TOOLS.salesforce_backup,
-          BACKUP_TOOLS.salesforce_backup_list,
-          BACKUP_TOOLS.salesforce_backup_status,
-          TIME_MACHINE_TOOLS[0]
-        ]
+        tools: availableTools,
       };
     });
 
